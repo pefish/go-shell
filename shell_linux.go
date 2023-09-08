@@ -8,7 +8,7 @@ import (
 )
 
 func NewCmd(s string) *exec.Cmd {
-	cmd := exec.Command("/cmd/bash", "-c", s)
+	cmd := exec.Command("/bin/bash", "-c", s)
 	cmd.Stdout = os.Stdout
 	return cmd
 }
