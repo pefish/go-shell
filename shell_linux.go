@@ -4,6 +4,7 @@
 package go_shell
 
 import (
+	"os"
 	"os/exec"
 )
 
