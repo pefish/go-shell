@@ -11,5 +11,6 @@ import (
 func NewCmd(s string) *exec.Cmd {
 	cmd := exec.Command("/bin/bash", "-c", s)
 	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 	return cmd
 }
