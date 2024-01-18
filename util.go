@@ -35,10 +35,21 @@ func ExecResultLineByLine(cmd *exec.Cmd, resultChan chan<- string) error {
 	if err != nil {
 		return err
 	}
-	scanner := bufio.NewScanner(stdout)
+	stderr, err := cmd.StderrPipe()
+	if err != nil {
+		return err
+	}
+	outScanner := bufio.NewScanner(stdout)
 	go func() {
-		for scanner.Scan() {
-			resultChan <- scanner.Text()
+		for outScanner.Scan() {
+			resultChan <- outScanner.Text()
+		}
+	}()
+
+	errScanner := bufio.NewScanner(stderr)
+	go func() {
+		for errScanner.Scan() {
+			resultChan <- errScanner.Text()
 		}
 	}()
 
