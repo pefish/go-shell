@@ -6,6 +6,7 @@ import (
 	"errors"
 	"os"
 	"os/exec"
+	"time"
 )
 
 func ExecInConsole(cmd *exec.Cmd) error {
@@ -63,6 +64,7 @@ func ExecForResultLineByLine(cmd *exec.Cmd, resultChan chan<- string) error {
 	}
 	err = cmd.Wait()
 	if err != nil {
+		time.Sleep(100 * time.Millisecond)
 		return errors.New(errMsg)
 	}
 

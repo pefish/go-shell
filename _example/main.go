@@ -22,7 +22,7 @@ do
  echo $i
 done
 
-gdrtg
+cd ~/svdfs/serg
 `)
 	resultChan := make(chan string)
 	go func() {
