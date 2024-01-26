@@ -55,6 +55,7 @@ func ExecForResultLineByLine(cmd *exec.Cmd, resultChan chan<- string) error {
 	go func() {
 		for errScanner.Scan() {
 			errMsgs = append(errMsgs, errScanner.Text())
+			resultChan <- errScanner.Text()
 		}
 	}()
 
