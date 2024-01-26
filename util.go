@@ -6,6 +6,7 @@ import (
 	"errors"
 	"os"
 	"os/exec"
+	"strings"
 	"time"
 )
 
@@ -49,12 +50,11 @@ func ExecForResultLineByLine(cmd *exec.Cmd, resultChan chan<- string) error {
 		}
 	}()
 
-	errMsg := ""
+	errMsgs := make([]string, 0)
 	errScanner := bufio.NewScanner(stderr)
 	go func() {
 		for errScanner.Scan() {
-			errMsg = errScanner.Text()
-			return
+			errMsgs = append(errMsgs, errScanner.Text())
 		}
 	}()
 
@@ -65,7 +65,7 @@ func ExecForResultLineByLine(cmd *exec.Cmd, resultChan chan<- string) error {
 	err = cmd.Wait()
 	if err != nil {
 		time.Sleep(100 * time.Millisecond)
-		return errors.New(errMsg)
+		return errors.New(strings.Join(errMsgs, "\n"))
 	}
 
 	return nil

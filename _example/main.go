@@ -16,13 +16,14 @@ func main() {
 func do() error {
 	cmd := go_shell.NewCmd(`
 #!/bin/bash
+set -euxo pipefail
 
 for i in {1..100}
 do
  echo $i
 done
 
-cd ~/svdfs/serg
+# cd ~/svdfs/serg
 `)
 	resultChan := make(chan string)
 	go func() {
