@@ -3,6 +3,7 @@ package go_shell
 import (
 	"bufio"
 	"bytes"
+	"errors"
 	"os"
 	"os/exec"
 )
@@ -18,7 +19,7 @@ func ExecInConsole(cmd *exec.Cmd) error {
 	return nil
 }
 
-func ExecResult(cmd *exec.Cmd) (string, error) {
+func ExecForResult(cmd *exec.Cmd) (string, error) {
 	var out bytes.Buffer
 	cmd.Stdout = &out
 	cmd.Stderr = &out
@@ -30,7 +31,7 @@ func ExecResult(cmd *exec.Cmd) (string, error) {
 	return out.String(), nil
 }
 
-func ExecResultLineByLine(cmd *exec.Cmd, resultChan chan<- string) error {
+func ExecForResultLineByLine(cmd *exec.Cmd, resultChan chan<- string) error {
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
 		return err
@@ -39,6 +40,7 @@ func ExecResultLineByLine(cmd *exec.Cmd, resultChan chan<- string) error {
 	if err != nil {
 		return err
 	}
+
 	outScanner := bufio.NewScanner(stdout)
 	go func() {
 		for outScanner.Scan() {
@@ -46,16 +48,23 @@ func ExecResultLineByLine(cmd *exec.Cmd, resultChan chan<- string) error {
 		}
 	}()
 
+	errMsg := ""
 	errScanner := bufio.NewScanner(stderr)
 	go func() {
 		for errScanner.Scan() {
-			resultChan <- errScanner.Text()
+			errMsg = errScanner.Text()
+			return
 		}
 	}()
 
-	err = cmd.Run()
+	err = cmd.Start()
 	if err != nil {
 		return err
 	}
+	err = cmd.Wait()
+	if err != nil {
+		return errors.New(errMsg)
+	}
+
 	return nil
 }

@@ -1,5 +1,5 @@
 module github.com/pefish/go-shell
 
-go 1.21
+go 1.20
 
-require github.com/pefish/go-test v0.0.4 // indirect
+require github.com/pefish/go-test v0.0.4

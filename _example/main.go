@@ -16,7 +16,6 @@ func main() {
 func do() error {
 	cmd := go_shell.NewCmd(`
 #!/bin/bash
-set -euxo pipefail
 
 for i in {1..100}
 do
@@ -34,7 +33,7 @@ gdrtg
 			}
 		}
 	}()
-	err := go_shell.ExecResultLineByLine(cmd, resultChan)
+	err := go_shell.ExecForResultLineByLine(cmd, resultChan)
 	if err != nil {
 		return err
 	}
