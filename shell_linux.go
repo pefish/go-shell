@@ -4,10 +4,11 @@
 package go_shell
 
 import (
+	"fmt"
 	"os/exec"
 )
 
-func NewCmd(s string) *exec.Cmd {
-	cmd := exec.Command("/bin/bash", "-c", s)
+func NewCmd(format string, a ...any) *exec.Cmd {
+	cmd := exec.Command("/bin/bash", "-c", fmt.Sprintf(format, a...))
 	return cmd
 }

@@ -10,7 +10,7 @@ import (
 )
 
 func TestNewCmd(t *testing.T) {
-	result, err := ExecResult(NewCmd("ls"))
+	result, err := ExecForResult(NewCmd("ls"))
 	go_test_.Equal(t, nil, err)
 	go_test_.Equal(t, true, len(result) > 0)
 }

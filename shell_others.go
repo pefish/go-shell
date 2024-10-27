@@ -3,8 +3,13 @@
 
 package go_shell
 
+import (
+	"errors"
+	"os/exec"
+)
+
 var ErrNotImplemented = errors.New("shell: not implemented")
 
-func NewCmd(s string) *exec.Cmd {
+func NewCmd(format string, a ...any) *exec.Cmd {
 	panic(ErrNotImplemented)
 }
