@@ -3,11 +3,12 @@ package go_shell
 import (
 	"bufio"
 	"bytes"
-	"errors"
 	"os"
 	"os/exec"
 	"strings"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
 func ExecInConsole(cmd *exec.Cmd) error {
@@ -16,7 +17,7 @@ func ExecInConsole(cmd *exec.Cmd) error {
 
 	err := cmd.Run()
 	if err != nil {
-		return err
+		return errors.Wrap(err, "")
 	}
 	return nil
 }
@@ -28,7 +29,7 @@ func ExecForResult(cmd *exec.Cmd) (string, error) {
 
 	err := cmd.Run()
 	if err != nil {
-		return "", err
+		return "", errors.Wrap(err, "")
 	}
 	return out.String(), nil
 }
@@ -36,11 +37,11 @@ func ExecForResult(cmd *exec.Cmd) (string, error) {
 func ExecForResultLineByLine(cmd *exec.Cmd, resultChan chan<- string) error {
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
-		return err
+		return errors.Wrap(err, "")
 	}
 	stderr, err := cmd.StderrPipe()
 	if err != nil {
-		return err
+		return errors.Wrap(err, "")
 	}
 
 	outScanner := bufio.NewScanner(stdout)
@@ -61,7 +62,7 @@ func ExecForResultLineByLine(cmd *exec.Cmd, resultChan chan<- string) error {
 
 	err = cmd.Start()
 	if err != nil {
-		return err
+		return errors.Wrap(err, "")
 	}
 	err = cmd.Wait()
 	if err != nil {

@@ -2,15 +2,26 @@ package main
 
 import (
 	"fmt"
-	go_shell "github.com/pefish/go-shell"
 	"log"
+
+	go_shell "github.com/pefish/go-shell"
 )
 
 func main() {
-	err := do()
+	err := do1()
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func do1() error {
+	cmd := go_shell.NewCmd("sudo docker logs redis --tail 20")
+	result, err := go_shell.ExecForResult(cmd)
+	if err != nil {
+		return err
+	}
+	fmt.Println(result)
+	return nil
 }
 
 func do() error {
